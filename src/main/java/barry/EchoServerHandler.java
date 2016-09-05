@@ -8,13 +8,15 @@ import org.springframework.stereotype.Component;
 /**
  * Handler implementation for the echo server.
  */
+@Sharable
 @Component
 public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         System.out.println(msg);
-//        ctx.write(msg);
+        ctx.write("OK");
+        ctx.flush();
     }
 
     @Override
