@@ -15,8 +15,8 @@ public class MainController {
         return "greeting";
     }
 
-    @RequestMapping("/test")
-    public String test() {
+    @RequestMapping("/")
+    public String home() {
         return "index";
     }
 
