@@ -22,7 +22,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
 //        System.out.println(msg);
         logger.info("Rev: " + msg);
-        ctx.write("OK");
+//        ctx.write("OK");
         ctx.flush();
     }
 
@@ -45,7 +45,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     public void sendStart() {
-        System.out.println("Start Clinet");
+        System.out.println("Start Watering");
         if (ctx != null) {
             ctx.write("START");
             ctx.flush();
@@ -53,4 +53,25 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("CTX is Null");
         }
     }
+
+    public void sendCheck() {
+        System.out.println("Check Status");
+        if (ctx != null) {
+            ctx.write("CHECK");
+            ctx.flush();
+        }else{
+            System.out.println("CTX is Null");
+        }
+    }
+
+    public void sendStop() {
+        System.out.println("Stop Watering");
+        if (ctx != null) {
+            ctx.write("STOP");
+            ctx.flush();
+        }else{
+            System.out.println("CTX is Null");
+        }
+    }
+
 }

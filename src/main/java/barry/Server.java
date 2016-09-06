@@ -47,9 +47,9 @@ public class Server {
                         .childHandler(serverInitializer);
 
 
-                serverChFuture = b.bind(8007).sync();
-                Thread.sleep(600*1000L);
-//                b.bind(8007).sync().channel().closeFuture().sync();
+//                serverChFuture = b.bind(8007).sync();
+//                Thread.sleep(600*1000L);
+                b.bind(8007).sync().channel().closeFuture().sync();
             } finally {
                 bossGroup.shutdownGracefully();
                 workerGroup.shutdownGracefully();

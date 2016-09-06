@@ -29,11 +29,13 @@ public class MainController {
 
     @RequestMapping("/stop")
     public String stop() {
+        serverHandler.sendStop();
         return "greeting";
     }
 
     @RequestMapping("/check")
     public String check() {
+        serverHandler.sendCheck();
         return "greeting";
     }
 
