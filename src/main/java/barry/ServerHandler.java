@@ -3,6 +3,8 @@ package barry;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,11 +12,16 @@ import org.springframework.stereotype.Component;
  */
 @Sharable
 @Component
-public class EchoServerHandler extends ChannelInboundHandlerAdapter {
+public class ServerHandler extends ChannelInboundHandlerAdapter {
+
+    private static final Logger logger = LoggerFactory.getLogger(AppRunner.class);
+
+    private ChannelHandlerContext ctx;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        System.out.println(msg);
+//        System.out.println(msg);
+        logger.info("Rev: " + msg);
         ctx.write("OK");
         ctx.flush();
     }
@@ -29,5 +36,21 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
         // Close the connection when an exception is raised.
         cause.printStackTrace();
         ctx.close();
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        this.ctx = ctx;
+        super.channelActive(ctx);
+    }
+
+    public void sendStart() {
+        System.out.println("Start Clinet");
+        if (ctx != null) {
+            ctx.write("START");
+            ctx.flush();
+        }else{
+            System.out.println("CTX is Null");
+        }
     }
 }

@@ -1,10 +1,14 @@
 package barry;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MainController {
+
+    @Autowired
+    public ServerHandler serverHandler;
 
     @RequestMapping("/greeting")
     public String greeting() {
@@ -19,6 +23,7 @@ public class MainController {
 
     @RequestMapping("/start")
     public String start() {
+        serverHandler.sendStart();
         return "watering";
     }
 
