@@ -14,15 +14,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
-    private static final Logger logger = LoggerFactory.getLogger(AppRunner.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServerHandler.class);
 
-    private ChannelHandlerContext ctx;
+    private ChannelHandlerContext ctx = null;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-//        System.out.println(msg);
         logger.info("Rev: " + msg);
-//        ctx.write("OK");
         ctx.flush();
     }
 
@@ -40,37 +38,42 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+
+        if (ctx != null) {
+            logger.warn("receive a new connection, but the last connection is online, disconnect it.");
+            ctx.disconnect();
+        }
         this.ctx = ctx;
         super.channelActive(ctx);
     }
 
     public void sendStart() {
-        System.out.println("Start Watering");
+        logger.info("receive start from web, Start Watering");
         if (ctx != null) {
             ctx.write("START");
             ctx.flush();
         }else{
-            System.out.println("CTX is Null");
+            logger.warn("CTX is Null, no connection.");
         }
     }
 
     public void sendCheck() {
-        System.out.println("Check Status");
+        logger.info("receive check from web, Check Status");
         if (ctx != null) {
             ctx.write("CHECK");
             ctx.flush();
         }else{
-            System.out.println("CTX is Null");
+            logger.warn("CTX is Null, no connection.");
         }
     }
 
     public void sendStop() {
-        System.out.println("Stop Watering");
+        logger.info("receive stop from web, Stop Watering");
         if (ctx != null) {
             ctx.write("STOP");
             ctx.flush();
-        }else{
-            System.out.println("CTX is Null");
+        } else {
+            logger.warn("CTX is Null, no connection.");
         }
     }
 
