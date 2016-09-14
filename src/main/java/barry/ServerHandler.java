@@ -130,7 +130,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             ctx.flush();
         }else{
-            clientStatus.notifyAll();
+            synchronized (clientStatus){
+                clientStatus.notifyAll();
+            }
             logger.warn("CTX is Null or inactive, no connection.");
         }
     }
@@ -147,7 +149,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             ctx.flush();
         }else{
-            opStatus.notifyAll();
+            synchronized (opStatus){
+                opStatus.notifyAll();
+            }
             logger.warn("CTX is Null or inactive, no connection.");
         }
     }
@@ -164,7 +168,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             ctx.flush();
         }else{
-            clientStatus.notifyAll();
+            synchronized (clientStatus){
+                clientStatus.notifyAll();
+            }
             logger.warn("CTX is Null or inactive, no connection.");
         }
     }
