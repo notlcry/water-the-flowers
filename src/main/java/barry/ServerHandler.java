@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleStateEvent;
 import org.apache.tomcat.util.bcel.Const;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +101,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     public void sendStart() {
         logger.info("receive start from web, Start Watering");
-        if (ctx != null) {
+        if (ctx != null && ctx.channel() != null && ctx.channel().isActive()) {
             Request request = new Request();
             request.setType(Constant.START);
             try {
@@ -116,7 +117,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     public void sendCheck() {
         logger.info("receive check from web, Check Status");
-        if (ctx != null) {
+        if (ctx != null && ctx.channel() != null && ctx.channel().isActive()) {
             Request request = new Request();
             request.setType(Constant.CHECK);
             try {
@@ -132,7 +133,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     public void sendStop() {
         logger.info("receive stop from web, Stop Watering");
-        if (ctx != null) {
+        if (ctx != null && ctx.channel() != null && ctx.channel().isActive()) {
             Request request = new Request();
             request.setType(Constant.STOP);
             try {
@@ -150,4 +151,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         return ctx != null;
     }
 
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt)
+            throws Exception {
+        if (evt instanceof IdleStateEvent) {
+            logger.error("no message received lager than 180s, may be the connection is broken, close it.");
+            ctx.close();// 连接180s未收到数据，则关闭连接
+        }
+        super.userEventTriggered(ctx, evt);
+    }
 }

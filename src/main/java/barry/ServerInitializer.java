@@ -51,13 +51,11 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
 		// 根据消息对象编码成byte
 //		pipeline.addLast("encoder", new MsgEncoder());
 
-		// 超时关闭连接
-//		pipeline.addLast(new IdleStateHandler(0, 0, 50000, TimeUnit.SECONDS));
-
-
         pipeline.addLast(new StringDecoder());
         pipeline.addLast(new StringEncoder());
 
+		// 超时关闭连接
+		pipeline.addLast(new IdleStateHandler(0, 0, 180, TimeUnit.SECONDS));
 
 		// 业务逻辑
 		pipeline.addLast("handler", serverHandler);
