@@ -12,6 +12,8 @@ public class Constant {
     public static final String STOP = "STOP";
     public static final String CHECK = "CHECK";
 
+    public static final String HEART_BEAT = "HEART_BEAT";
+
     public static final String UNKNOWN = "UNKNOWN";
     public static final String SUCCESS = "SUCCESS";
     public static final String FAIL = "FAIL";

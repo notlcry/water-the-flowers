@@ -68,12 +68,31 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                         clientStatus.setInfo(resp.getInfo());
                         clientStatus.notifyAll();
                     }
+
+                case Constant.HEART_BEAT:
+                    sendHB();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         ctx.flush();
+    }
+
+    private void sendHB() {
+        logger.info("receive HB from client, reply");
+        if (ctx != null && ctx.channel() != null && ctx.channel().isActive()) {
+            Request request = new Request();
+            request.setType(Constant.HEART_BEAT);
+            try {
+                ctx.write(objectMapper.writeValueAsString(request));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            ctx.flush();
+        }else{
+            logger.warn("CTX is Null or inactive, no connection.");
+        }
     }
 
     @Override
@@ -111,7 +130,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             ctx.flush();
         }else{
-            logger.warn("CTX is Null, no connection.");
+            clientStatus.notifyAll();
+            logger.warn("CTX is Null or inactive, no connection.");
         }
     }
 
@@ -127,7 +147,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             ctx.flush();
         }else{
-            logger.warn("CTX is Null, no connection.");
+            opStatus.notifyAll();
+            logger.warn("CTX is Null or inactive, no connection.");
         }
     }
 
@@ -143,7 +164,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             ctx.flush();
         }else{
-            logger.warn("CTX is Null, no connection.");
+            clientStatus.notifyAll();
+            logger.warn("CTX is Null or inactive, no connection.");
         }
     }
 
@@ -155,8 +177,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt)
             throws Exception {
         if (evt instanceof IdleStateEvent) {
-            logger.error("no message received lager than 180s, may be the connection is broken, close it.");
-            ctx.close();// 连接180s未收到数据，则关闭连接
+            logger.error("no message received lager than 90s, may be the connection is broken, close it.");
+            ctx.close();
         }
         super.userEventTriggered(ctx, evt);
     }

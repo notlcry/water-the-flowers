@@ -55,7 +55,7 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new StringEncoder());
 
 		// 超时关闭连接
-		pipeline.addLast(new IdleStateHandler(0, 0, 180, TimeUnit.SECONDS));
+		pipeline.addLast(new IdleStateHandler(0, 0, 90, TimeUnit.SECONDS));
 
 		// 业务逻辑
 		pipeline.addLast("handler", serverHandler);
