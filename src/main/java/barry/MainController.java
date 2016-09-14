@@ -46,7 +46,7 @@ public class MainController {
         serverHandler.sendStart();
         synchronized (opStatus){
             try {
-                opStatus.wait(3 * 1000l);
+                opStatus.wait(Constant.TIME_OUT * 1000l);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -75,7 +75,7 @@ public class MainController {
         serverHandler.sendStop();
         synchronized (opStatus){
             try {
-                opStatus.wait(3 * 1000l);
+                opStatus.wait(Constant.TIME_OUT * 1000l);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -105,7 +105,7 @@ public class MainController {
         serverHandler.sendCheck();
         synchronized (clientStatus){
             try {
-                clientStatus.wait(3 * 1000l);
+                clientStatus.wait(Constant.TIME_OUT * 1000l);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

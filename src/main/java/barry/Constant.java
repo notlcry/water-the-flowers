@@ -6,6 +6,8 @@ package barry;
 
 
 public class Constant {
+
+    public static final int TIME_OUT = 6;
     public static final String START = "START";
     public static final String STOP = "STOP";
     public static final String CHECK = "CHECK";
