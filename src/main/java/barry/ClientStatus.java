@@ -18,13 +18,13 @@ public class ClientStatus {
 
     @PostConstruct
     public void init(){
-        this.piStatus = "UNKNOWN";
-        this.gpioStatus = "UNKNOWN";
+        this.piStatus = Constant.UNKNOWN;
+        this.gpioStatus = Constant.UNKNOWN;
     }
 
     public void reset(){
-        this.piStatus = "UNKNOWN";
-        this.gpioStatus = "UNKNOWN";
+        this.piStatus = Constant.UNKNOWN;
+        this.gpioStatus = Constant.UNKNOWN;
         this.info = "";
     }
 

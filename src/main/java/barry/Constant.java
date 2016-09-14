@@ -13,4 +13,11 @@ public class Constant {
     public static final String UNKNOWN = "UNKNOWN";
     public static final String SUCCESS = "SUCCESS";
     public static final String FAIL = "FAIL";
+
+    public static final String WATER_ON = "ON";
+    public static final String WATER_OFF = "OFF";
+
+    public static final String TIME_OUT_MSG = "Timeout, cannot get the response from rpi.";
+
+    public static final String NO_RPI_MSG = "Sorry, there is no rpi connected, please check you box.";
 }

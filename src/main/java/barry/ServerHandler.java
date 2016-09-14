@@ -1,10 +1,13 @@
 package barry;
 
+import barry.msg.Request;
 import barry.msg.Response;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import org.apache.tomcat.util.bcel.Const;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +49,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             switch (resp.getType()){
                 case Constant.START:
                     synchronized (opStatus){
-                        opStatus.setResult(resp.getReslut());
+                        opStatus.setResult(resp.getResult());
                         opStatus.setInfo(resp.getInfo());
                         opStatus.notifyAll();
                     }
 
                 case Constant.STOP:
                     synchronized (opStatus){
-                        opStatus.setResult(resp.getReslut());
+                        opStatus.setResult(resp.getResult());
                         opStatus.setInfo(resp.getInfo());
                         opStatus.notifyAll();
                     }
@@ -98,7 +101,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void sendStart() {
         logger.info("receive start from web, Start Watering");
         if (ctx != null) {
-            ctx.write("START");
+            Request request = new Request();
+            request.setType(Constant.START);
+            try {
+                ctx.write(objectMapper.writeValueAsString(request));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
             ctx.flush();
         }else{
             logger.warn("CTX is Null, no connection.");
@@ -108,7 +117,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void sendCheck() {
         logger.info("receive check from web, Check Status");
         if (ctx != null) {
-            ctx.write("CHECK");
+            Request request = new Request();
+            request.setType(Constant.CHECK);
+            try {
+                ctx.write(objectMapper.writeValueAsString(request));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
             ctx.flush();
         }else{
             logger.warn("CTX is Null, no connection.");
@@ -118,11 +133,21 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void sendStop() {
         logger.info("receive stop from web, Stop Watering");
         if (ctx != null) {
-            ctx.write("STOP");
+            Request request = new Request();
+            request.setType(Constant.STOP);
+            try {
+                ctx.write(objectMapper.writeValueAsString(request));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
             ctx.flush();
-        } else {
+        }else{
             logger.warn("CTX is Null, no connection.");
         }
+    }
+
+    public boolean hasRpi(){
+        return ctx != null;
     }
 
 }

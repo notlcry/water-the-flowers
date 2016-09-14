@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Response {
     private String type;
 
-    private String reslut;
+    private String result;
 
     private String info;
 
@@ -24,12 +24,12 @@ public class Response {
         this.type = type;
     }
 
-    public String getReslut() {
-        return reslut;
+    public String getResult() {
+        return result;
     }
 
-    public void setReslut(String reslut) {
-        this.reslut = reslut;
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public String getInfo() {
